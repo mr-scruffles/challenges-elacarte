@@ -1,6 +1,3 @@
-/**
- * Created by ryan on 11/4/17.
- */
 public class Main {
     public static void main(String[] args) {
         SessionController controller = new SessionController();
