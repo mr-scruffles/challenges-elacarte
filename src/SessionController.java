@@ -1,7 +1,8 @@
 import java.util.*;
 
 /**
- *
+ * This class is responsible for creating new events and monitoring their state for
+ * when a session is open and closed.
  */
 public class SessionController {
 
@@ -19,7 +20,7 @@ public class SessionController {
         eventTypeDuration = new HashMap<>();
         eventTypeDuration.put(EventType.SWIPE, 10);
         eventTypeDuration.put(EventType.TOUCH, 5);
-        eventTypeDuration.put(EventType.CHECK, 0); // CHECK events do not time out.
+        eventTypeDuration.put(EventType.CHECK, 0); // CHECK events do not have intervals.
     }
 
     /**
@@ -55,10 +56,18 @@ public class SessionController {
         if(DEBUG) System.out.println("Session Controller stopped");
     }
 
+    /**
+     * Checks if session monitor has an active timer.
+     * @return true|active otherwise false|inactive.
+     */
     public Boolean isEvenMonitorActive() {
         return this.timer != null;
     }
 
+    /**
+     * Adds a new event.
+     * @param type The event type.
+     */
     public void addEvent(EventType type) {
 
         if(!this.sessionStarted) {
@@ -82,6 +91,11 @@ public class SessionController {
         }
     }
 
+    /**
+     * Processes the event to be created.
+     *
+     * @param eventType The event type.
+     */
     private void handleEvent(EventType eventType) {
         if(this.session.containsKey(eventType)) {
             Event event = this.session.get(eventType);
@@ -101,14 +115,28 @@ public class SessionController {
         }
     }
 
+    /**
+     * Checks if there are any active events, if so there is a session active.
+     *
+     * @return true|active otherwise false|inactive.
+     */
     public Boolean hasSession() {
         return this.session.size() > 0;
     }
 
+    /**
+     * Returns the event count for a given session.
+     *
+     * @return Number of events.
+     */
     public int getEventCount() {
         return this.session.size();
     }
 
+    /**
+     * This class is responsible for defining that action that will be taken
+     * by the time once its interval is reached.
+     */
     private class SessionTask extends TimerTask {
         @Override
         public void run() {
